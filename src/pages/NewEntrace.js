@@ -1,14 +1,53 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import InformationUser from "../context/auth";
 
 export default function NewEntrace() {
+    const navegation = useNavigate()
+    const {user} = useContext(InformationUser)
+    const [entrace, setEntrace] = useState({
+        value: "",
+        description: "",
+        type: "entrace"
+    })
+
+    const hendleForm = (e, key)=>{
+        setEntrace({...entrace, [key]: e.target.value})
+    }
+    const headers = {
+        headers: { Authorization: `Bearer ${user.token}` }
+      };
+    const sendForm = async (e)=>{
+        e.preventDefault()
+        try {
+            const url = "http://localhost:5000/wallet"
+            await axios.post(url, entrace, headers)
+            navegation('/home')
+        } catch (error) {
+            alert('ERROR: ' + error.response.data.message)
+        }
+    }
     return (
         <ConteinerEntrace>
             Nova entrada
-            <Form>
-                <input type={"number"} placeholder="Valor" />
-                <input type={"text"} placeholder="Descrição" />
-                <Link to={"/home"}><button type="submit">Salvar entrada</button></Link>
+            <Form onSubmit={(e)=> sendForm(e)}>
+                <input 
+                type={"number"} 
+                placeholder="Valor" 
+                value={entrace.value}
+                onChange={(e)=> hendleForm(e, "value")}
+                required
+                />
+                <input 
+                type={"text"} 
+                placeholder="Descrição" 
+                value={entrace.description}
+                onChange={(e)=> hendleForm(e, "description")}
+                required
+                />
+                <button type="submit">Salvar entrada</button>
             </Form>
         </ConteinerEntrace>
     )

@@ -1,26 +1,58 @@
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { AiOutlineExport, AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import ListTransaction from "../components/ListTransaction";
+import InformationUser from "../context/auth";
+
 export default function Home() {
+    const { user } = useContext(InformationUser)
+    const [transactions, setTransactions] = useState([]);
+    const headers = {
+        headers: { Authorization: `Bearer ${user.token}` }
+      };
+    useEffect(() => {
+        async function getUserTransaction() {
+            try {
+                const url = 'http://localhost:5000/wallet'
+                const promise = await axios.get(url, headers)
+                console.log(promise.data);
+                setTransactions(promise.data);
+            } catch (error) {
+                //alert('Ops! Ocorreu erro! Tente novamente!');
+                console.error(error.response);
+            }
+        }
+
+        getUserTransaction();
+    }, []);
+
     return (
+
         <ConteinerHome>
             <HeaderHome>
-                Olá, Fulano
+                <span>Olá, {user.name}</span>
                 <AiOutlineExport color="#fff" width={23} height={24} />
             </HeaderHome>
-            <List>
-                <p>Não há registros de entrada ou saída</p>
-            </List>
+            {transactions.length > 0 ? <ListTransaction transactions={transactions} /> : <List>Não há registros de <br />
+                entrada ou saída</List>}
+            <ListTransaction />
             <Cards>
-                <div>
-                    <AiOutlinePlusCircle color="#fff"/>
-                    <p>Nova <br/>
-                        entrada</p>
-                </div>
-                <div>
-                    <AiOutlineMinusCircle color="#fff"/>
-                    <p>Nova <br/>
-                        saida</p>
-                </div>
+                <Link to={"/nova-entrada"}>
+                    <div>
+                        <AiOutlinePlusCircle color="#fff" />
+                        <p>Nova <br />
+                            entrada</p>
+                    </div>
+                </Link>
+                <Link to={"/nova-saida"}>
+                    <div>
+                        <AiOutlineMinusCircle color="#fff" />
+                        <p>Nova <br />
+                            saida</p>
+                    </div>
+                </Link>
             </Cards>
         </ConteinerHome>
     )

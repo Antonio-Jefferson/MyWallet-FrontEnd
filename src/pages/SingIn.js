@@ -1,14 +1,52 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header"
+import InformationUser from "../context/auth";
 export default function SingIn() {
+    const { setUser } = useContext(InformationUser);
+    const navegation = useNavigate()
+    const [infUser, setInfUser] = useState({
+        email: "",
+        password: ""
+    })
+
+    const hendleLogin = (e, key) => {
+        setInfUser({ ...infUser, [key]: e.target.value })
+    }
+
+    const singInForm = async (e) => {
+        e.preventDefault()
+
+        try {
+            const url = "http://localhost:5000/sing-in";
+            const promise = await axios.post(url, infUser)
+            setUser(promise.data)
+            navegation("/home")
+        } catch (error) {
+            alert('ERROR: ' + error.response.data.message)
+        }
+    }
     return (
         <ConteinerSingIn>
             <Header />
-            <FormSingIn>
-                <input type={"email"} placeholder="Email" />
-                <input type={"password"} placeholder="Senha" />
-                <Link to={"/home"}><button type="submit">Entrar</button></Link>
+            <FormSingIn onSubmit={(e) => singInForm(e)}>
+                <input
+                    type={"email"}
+                    placeholder="Email"
+                    value={infUser.email}
+                    required
+                    onChange={(e) => hendleLogin(e, 'email')}
+                />
+                <input
+                    type={"password"}
+                    placeholder="Senha"
+                    value={infUser.password}
+                    required
+                    onChange={(e) => hendleLogin(e, 'password')}
+                />
+                <button type="submit">Entrar</button>
             </FormSingIn>
             <Link to={"/cadastro"}><p>Primeira vez? Cadastre-se!</p></Link>
         </ConteinerSingIn>

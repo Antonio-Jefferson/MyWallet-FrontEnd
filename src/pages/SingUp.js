@@ -1,21 +1,72 @@
-import { Link } from "react-router-dom";
-import styled from "styled-components";
 import Header from "../components/Header"
+import styled from "styled-components"
+import { useState } from "react"
+import axios from "axios"
+import { Link, useNavigate } from "react-router-dom"
 export default function SingUp() {
+    const navegation = useNavigate()
+    const [registration, setRegistration] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    })
+
+    const registerAccount = (e, key) => {
+        setRegistration({ ...registration, [key]: e.target.value })
+    }
+
+    const posInformationUser = async (e) => {
+        e.preventDefault()
+        try {
+            const url = "http://localhost:5000/sing-up"
+            await axios.post(url, registration)
+            navegation("/")  
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
     return (
         <ConetinerSingUp>
-        <Header />
-        <FormSingUp>
-            <input type={"text"} placeholder="Nome" />
-            <input type={"email"} placeholder="Email" />
-            <input type={"password"} placeholder="Senha" />
-            <input type={"password"} placeholder="Confirmar senha" />
-            <button type="submit">Cadastrar</button>
-        </FormSingUp>
-        <Link to={"/"}><p>Já tem uma conta? Entre agora!</p></Link>
-    </ConetinerSingUp>
-)
+            <Header />
+            <FormSingUp onSubmit={(e) => posInformationUser(e)}>
+                <input
+                    type={"text"}
+                    placeholder={"Nome"}
+                    value={registration.name}
+                    onChange={(e) => registerAccount(e, 'name')}
+                    required
+                />
+                <input
+                    type={"email"}
+                    placeholder={"Email"}
+                    value={registration.email}
+                    onChange={(e) => registerAccount(e, 'email')}
+                    required
+                />
+                <input
+                    type={"password"}
+                    placeholder={"Senha"}
+                    value={registration.password}
+                    onChange={(e) => registerAccount(e, 'password')}
+                    required
+                />
+                <input
+                    type={"password"}
+                    placeholder={"confirmar senha"}
+                    value={registration.confirmPassword}
+                    onChange={(e) => registerAccount(e, 'confirmPassword')}
+                    required
+                />
+                <button type="submit">Cadastrar</button>
+            </FormSingUp>
+            <Link to={"/"}><p>Já possui conta? Faça login!</p></Link>
+        </ConetinerSingUp>
+    )
 }
+
+
 
 const FormSingUp = styled.form`
 display: flex;
