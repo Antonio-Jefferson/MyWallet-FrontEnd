@@ -9,35 +9,48 @@ import InformationUser from "../context/auth";
 export default function Home() {
     const { user } = useContext(InformationUser)
     const [transactions, setTransactions] = useState([]);
+    const [grandTotal, setGrandTotal] = useState(0)
     const headers = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
     useEffect(() => {
         async function getUserTransaction() {
             try {
-                const url = 'http://localhost:5000/wallet'
+                const url = 'http://localhost:5001/wallet'
                 const promise = await axios.get(url, headers)
                 console.log(promise.data);
                 setTransactions(promise.data);
+                balance(promise.data)
             } catch (error) {
-                //alert('Ops! Ocorreu erro! Tente novamente!');
-                console.error(error.response);
+                alert('Ops! Ocorreu erro! Tente novamente!');
             }
-        }
-
+        } 
         getUserTransaction();
     }, []);
+    function balance(dados){
+        let entrace = 0;
+        let exit = 0;
+        let GrandTotal
+        dados.map((e)=> {
+            if(e.type === "entrace"){
+                entrace = entrace +  Number(e.value)
+            }else{
+               exit = exit + Number(e.value)
+            }
+            GrandTotal  = entrace - exit
+            setGrandTotal(GrandTotal)
+        })
 
+    }
     return (
 
         <ConteinerHome>
             <HeaderHome>
                 <span>Olá, {user.name}</span>
-                <AiOutlineExport color="#fff" width={23} height={24} />
+                <Link to={"/"}><AiOutlineExport color="#fff" width={23} height={24} /></Link>
             </HeaderHome>
-            {transactions.length > 0 ? <ListTransaction transactions={transactions} /> : <List>Não há registros de <br />
+            {transactions.length > 0 ? <ListTransaction transactions={transactions}  total={grandTotal} /> : <List>Não há registros de <br />
                 entrada ou saída</List>}
-            <ListTransaction />
             <Cards>
                 <Link to={"/nova-entrada"}>
                     <div>
@@ -109,6 +122,5 @@ const Cards = styled.div`
             color: var(--white);
         }
     }
-    
 
 `

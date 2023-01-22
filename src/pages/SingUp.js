@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useState } from "react"
 import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
+
 export default function SingUp() {
     const navegation = useNavigate()
     const [registration, setRegistration] = useState({
@@ -19,7 +20,7 @@ export default function SingUp() {
     const posInformationUser = async (e) => {
         e.preventDefault()
         try {
-            const url = "http://localhost:5000/sing-up"
+            const url = "http://localhost:5001/sing-up"
             await axios.post(url, registration)
             navegation("/")  
         } catch (error) {

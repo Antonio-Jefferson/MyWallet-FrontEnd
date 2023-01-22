@@ -1,22 +1,17 @@
 import styled from "styled-components"
-//style={t.type === 'entrada' ? { color: 'green' } : { color: 'red' }}
-export default function ListTransaction(){
-    return(
+import CardTransaction from "./CardTransaction"
+
+export default function ListTransaction({ transactions, total }) {
+    console.log(transactions)
+    
+    return (
         <List>
             <ul>
-                <Li>
-                    <div>
-                        <p>
-                            23/03
-                        </p>
-                        <span>comprar comida</span>
-                    </div>
-                    <span>valor</span>
-                </Li>
+                {transactions.map((item)=> <CardTransaction item={item}/> )}
             </ul>
             <BalanceUser>
                 <p>Saldo</p>
-                <span>valor do saldo</span>
+                <span style={total > 0 ? { color: 'green' } : { color: 'red' }}>{total.toFixed(2)}</span>
             </BalanceUser>
         </List>
     )
@@ -39,25 +34,5 @@ const BalanceUser = styled.div`
         font-family: 'Raleway';
         font-weight: 700;
         font-size: 17px;
-    }
-`
-const Li = styled.li`
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    div{
-        display: flex;
-        gap: 5px;
-        span{
-            font-family: 'Raleway';
-            font-weight: 400;
-            font-size: 16px;
-        }
-        p{
-            font-family: 'Raleway';
-            font-weight: 400;
-            font-size: 16px;
-            color: #C6C6C6;
-        }
     }
 `

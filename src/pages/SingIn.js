@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header"
 import InformationUser from "../context/auth";
+
 export default function SingIn() {
     const { setUser } = useContext(InformationUser);
     const navegation = useNavigate()
@@ -20,7 +21,7 @@ export default function SingIn() {
         e.preventDefault()
 
         try {
-            const url = "http://localhost:5000/sing-in";
+            const url = "http://localhost:5001/sing-in";
             const promise = await axios.post(url, infUser)
             setUser(promise.data)
             navegation("/home")
@@ -48,7 +49,7 @@ export default function SingIn() {
                 />
                 <button type="submit">Entrar</button>
             </FormSingIn>
-            <Link to={"/cadastro"}><p>Primeira vez? Cadastre-se!</p></Link>
+            <Link to={"/cadastro"}>Primeira vez? Cadastre-se!</Link>
         </ConteinerSingIn>
     )
 }

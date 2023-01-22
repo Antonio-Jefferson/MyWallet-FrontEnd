@@ -22,7 +22,7 @@ export default function NewEntrace() {
     const sendForm = async (e)=>{
         e.preventDefault()
         try {
-            const url = "http://localhost:5000/wallet"
+            const url = "http://localhost:5001/wallet"
             await axios.post(url, entrace, headers)
             navegation('/home')
         } catch (error) {
