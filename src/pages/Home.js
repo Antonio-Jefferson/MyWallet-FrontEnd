@@ -16,7 +16,7 @@ export default function Home() {
     useEffect(() => {
         async function getUserTransaction() {
             try {
-                const url = 'http://localhost:5001/wallet'
+                const url = 'https://mywallet-api-jcbx.onrender.com/wallet'
                 const promise = await axios.get(url, headers)
                 console.log(promise.data);
                 setTransactions(promise.data);

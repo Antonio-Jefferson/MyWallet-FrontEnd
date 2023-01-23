@@ -21,7 +21,7 @@ export default function SingIn() {
         e.preventDefault()
 
         try {
-            const url = "http://localhost:5001/sing-in";
+            const url = "https://mywallet-api-jcbx.onrender.com/sing-in";
             const promise = await axios.post(url, infUser)
             setUser(promise.data)
             navegation("/home")

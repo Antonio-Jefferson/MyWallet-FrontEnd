@@ -5,6 +5,10 @@ const GlobalStyled = createGlobalStyle`
         margin: 0px;
         padding: 0px;
         box-sizing: border-box;
+        a{
+            text-decoration: none;
+            color: var(--white);
+        }
     }
     :root{
         --primary:#8C11BE;

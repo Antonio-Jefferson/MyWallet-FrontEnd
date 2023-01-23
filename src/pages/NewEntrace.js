@@ -22,7 +22,7 @@ export default function NewEntrace() {
     const sendForm = async (e)=>{
         e.preventDefault()
         try {
-            const url = "http://localhost:5001/wallet"
+            const url = "https://mywallet-api-jcbx.onrender.com/wallet"
             await axios.post(url, entrace, headers)
             navegation('/home')
         } catch (error) {

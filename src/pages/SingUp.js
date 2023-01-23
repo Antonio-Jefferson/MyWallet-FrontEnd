@@ -20,7 +20,7 @@ export default function SingUp() {
     const posInformationUser = async (e) => {
         e.preventDefault()
         try {
-            const url = "http://localhost:5001/sing-up"
+            const url = "https://mywallet-api-jcbx.onrender.com/sing-up"
             await axios.post(url, registration)
             navegation("/")  
         } catch (error) {
